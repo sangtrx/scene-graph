@@ -60,6 +60,7 @@ class Checkpointer(object):
             self.logger.info("No checkpoint found. Initializing model from scratch")
             return {}
         self.logger.info("Loading checkpoint from {}".format(f))
+        f = '/home/tqsang/scene_graph/Scene-Graph-Benchmark.pytorch/checkpoints/model_0028000.pth'
         checkpoint = self._load_file(f)
         self._load_model(checkpoint, load_mapping)
         if with_optim:

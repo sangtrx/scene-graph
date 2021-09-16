@@ -35,10 +35,10 @@ _C.MODEL.CLS_AGNOSTIC_BBOX_REG = False
 # If the WEIGHT starts with a catalog://, like :R-50, the code will look for
 # the path in paths_catalog. Else, it will use it as the specified absolute
 # path
-_C.MODEL.WEIGHT = ""
+_C.MODEL.WEIGHT = "/home/tqsang/scene_graph/Scene-Graph-Benchmark.pytorch/checkpoints/model_0028000.pth"
 
 # checkpoint of detector, for relation prediction
-_C.MODEL.PRETRAINED_DETECTOR_CKPT = ""
+_C.MODEL.PRETRAINED_DETECTOR_CKPT = "/home/tqsang/scene_graph/Scene-Graph-Benchmark.pytorch/checkpoints/model_0028000.pth"
 
 # -----------------------------------------------------------------------------
 # INPUT
@@ -585,6 +585,7 @@ _C.TEST.CUSTUM_PATH = '.'
 _C.OUTPUT_DIR = "."
 _C.DETECTED_SGG_DIR = "."
 _C.GLOVE_DIR = "."
+_C.VIDEO_LIST = "." ###
 
 _C.PATHS_CATALOG = os.path.join(os.path.dirname(__file__), "paths_catalog.py")
 _C.PATHS_DATA = os.path.join(os.path.dirname(__file__), "../data/datasets")

@@ -112,7 +112,7 @@ class DatasetCatalog(object):
             "image_file": "vg/image_data.json",
         },
         "VG_stanford_filtered_with_attribute": {
-            "img_dir": "vg/VG_100K",
+            "img_dir": "/media/Seagate16T/tqsang/vg/VG_100K", #"vg/VG_100K"
             "roidb_file": "vg/VG-SGG-with-attri.h5",
             "dict_file": "vg/VG-SGG-dicts-with-attri.json",
             "image_file": "vg/image_data.json",

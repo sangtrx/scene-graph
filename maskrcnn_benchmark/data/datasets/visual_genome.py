@@ -53,6 +53,9 @@ class VGDataset(torch.utils.data.Dataset):
         self.categories = {i : self.ind_to_classes[i] for i in range(len(self.ind_to_classes))}
 
         self.custom_eval = custom_eval
+        # print(custom_eval)
+        # print(custom_path)
+        # print(1)
         if self.custom_eval:
             self.get_custom_imgs(custom_path)
         else:
@@ -306,8 +309,8 @@ def load_image_filenames(img_dir, image_file):
         if os.path.exists(filename):
             fns.append(filename)
             img_info.append(img)
-    assert len(fns) == 108073
-    assert len(img_info) == 108073
+    # assert len(fns) == 108073
+    # assert len(img_info) == 108073
     return fns, img_info
 
 
