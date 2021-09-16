@@ -17,7 +17,9 @@ def main():
         output_predict_path = output_path+'/custom_prediction.json'
         
         if not osp.isfile(output_predict_path):
-            shutil.rmtree(output_path)
+            print(folder_name)
+            if osp.isfile(output_path):
+                shutil.rmtree(output_path)
             continue
 
         filesize = osp.getsize(output_predict_path)
@@ -33,3 +35,22 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# v_5LGh56euaZs
+# v_qn7LRqyyjVE
+# v_m_ST2LDe5lA
+# v_WSpfyZuoi3A
+# v_gdyEfPbUEjw
+# v_YW3mCNKVaa4
+# v_TfIGKODkpPY
+# v_OGJsBzZX04o
+# v_RPLbUeV3-o0
+# v_JyjONoyBr4Q
+# v_PqcdYoa--8g
+# v_LjfF72Hwpyg
+# v_nYxjWwJrHwk
+# v_WdKelyOqZvU
+# v_ZH8hnmjRDsI
+# v_swmNnPkPBek
+# v_a9qztQPPsJg
+# v_TqcoukXhXeA

@@ -31,12 +31,18 @@ def compute_on_dataset(model, data_loader, device, synchronize_gather=True, time
                 output = im_detect_bbox_aug(model, images, device)
             else:
                 # relation detection needs the targets
-                output = model(images.to(device), targets)
+                try:
+                    output = model(images.to(device), targets)
+                    output = [o.to(cpu_device) for o in output]
+                    print(output)
+                    # import pdb; pdb.set_trace()
+                except AssertionError:
+                    output = []
             if timer:
                 if not cfg.MODEL.DEVICE == 'cpu':
                     torch.cuda.synchronize()
                 timer.toc()
-            output = [o.to(cpu_device) for o in output]
+            # output = [o.to(cpu_device) for o in output]
         if synchronize_gather:
             synchronize()
             multi_gpu_predictions = all_gather({img_id: result for img_id, result in zip(image_ids, output)})
@@ -161,40 +167,44 @@ def inference(
 def custom_sgg_post_precessing(predictions):
     output_dict = {}
     for idx, boxlist in enumerate(predictions):
-        xyxy_bbox = boxlist.convert('xyxy').bbox
-        # current sgg info
-        current_dict = {}
-        # sort bbox based on confidence
-        sortedid, id2sorted = get_sorted_bbox_mapping(boxlist.get_field('pred_scores').tolist())
-        # sorted bbox label and score
-        bbox = []
-        bbox_labels = []
-        bbox_scores = []
-        for i in sortedid:
-            bbox.append(xyxy_bbox[i].tolist())
-            bbox_labels.append(boxlist.get_field('pred_labels')[i].item())
-            bbox_scores.append(boxlist.get_field('pred_scores')[i].item())
-        current_dict['bbox'] = bbox
-        current_dict['bbox_labels'] = bbox_labels
-        current_dict['bbox_scores'] = bbox_scores
-        # sorted relationships
-        rel_sortedid, _ = get_sorted_bbox_mapping(boxlist.get_field('pred_rel_scores')[:,1:].max(1)[0].tolist())
-        # sorted rel
-        rel_pairs = []
-        rel_labels = []
-        rel_scores = []
-        rel_all_scores = []
-        for i in rel_sortedid:
-            rel_labels.append(boxlist.get_field('pred_rel_scores')[i][1:].max(0)[1].item() + 1)
-            rel_scores.append(boxlist.get_field('pred_rel_scores')[i][1:].max(0)[0].item())
-            rel_all_scores.append(boxlist.get_field('pred_rel_scores')[i].tolist())
-            old_pair = boxlist.get_field('rel_pair_idxs')[i].tolist()
-            rel_pairs.append([id2sorted[old_pair[0]], id2sorted[old_pair[1]]])
-        current_dict['rel_pairs'] = rel_pairs
-        current_dict['rel_labels'] = rel_labels
-        current_dict['rel_scores'] = rel_scores
-        current_dict['rel_all_scores'] = rel_all_scores
-        output_dict[idx] = current_dict
+        if boxlist == []:
+            current_dict = {}
+            output_dict[idx] = current_dict
+        else:
+            xyxy_bbox = boxlist.convert('xyxy').bbox
+            # current sgg info
+            current_dict = {}
+            # sort bbox based on confidence
+            sortedid, id2sorted = get_sorted_bbox_mapping(boxlist.get_field('pred_scores').tolist())
+            # sorted bbox label and score
+            bbox = []
+            bbox_labels = []
+            bbox_scores = []
+            for i in sortedid:
+                bbox.append(xyxy_bbox[i].tolist())
+                bbox_labels.append(boxlist.get_field('pred_labels')[i].item())
+                bbox_scores.append(boxlist.get_field('pred_scores')[i].item())
+            current_dict['bbox'] = bbox
+            current_dict['bbox_labels'] = bbox_labels
+            current_dict['bbox_scores'] = bbox_scores
+            # sorted relationships
+            rel_sortedid, _ = get_sorted_bbox_mapping(boxlist.get_field('pred_rel_scores')[:,1:].max(1)[0].tolist())
+            # sorted rel
+            rel_pairs = []
+            rel_labels = []
+            rel_scores = []
+            rel_all_scores = []
+            for i in rel_sortedid:
+                rel_labels.append(boxlist.get_field('pred_rel_scores')[i][1:].max(0)[1].item() + 1)
+                rel_scores.append(boxlist.get_field('pred_rel_scores')[i][1:].max(0)[0].item())
+                rel_all_scores.append(boxlist.get_field('pred_rel_scores')[i].tolist())
+                old_pair = boxlist.get_field('rel_pair_idxs')[i].tolist()
+                rel_pairs.append([id2sorted[old_pair[0]], id2sorted[old_pair[1]]])
+            current_dict['rel_pairs'] = rel_pairs
+            current_dict['rel_labels'] = rel_labels
+            current_dict['rel_scores'] = rel_scores
+            current_dict['rel_all_scores'] = rel_all_scores
+            output_dict[idx] = current_dict
     return output_dict
     
 def get_sorted_bbox_mapping(score_list):

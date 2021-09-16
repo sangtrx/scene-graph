@@ -105,7 +105,8 @@ def main():
         with open(path_to_video_list, 'r') as f:
             video_list = json.load(f)
     # v_5LGh56euaZs
-    ignored_list = ['v_PqcdYoa--8g','v_m_ST2LDe5lA','v_OGJsBzZX04o','v_JyjONoyBr4Q','v_a9qztQPPsJg','v_ZH8hnmjRDsI','v_a9qztQPPsJg','v_m_ST2LDe5lA','v_nYxjWwJrHwk','v_swmNnPkPBek','v_nYxjWwJrHwk','v_RPLbUeV3-o0','v_WSpfyZuoi3A','v_TqcoukXhXeA','v_LjfF72Hwpyg','v_gdyEfPbUEjw','v_5LGh56euaZs','v_YW3mCNKVaa4','v_WdKelyOqZvU','v_zEttEkAdHts','v_qn7LRqyyjVE', 'v_TfIGKODkpPY']
+    # ignored_list = ['v_PqcdYoa--8g','v_m_ST2LDe5lA','v_OGJsBzZX04o','v_JyjONoyBr4Q','v_a9qztQPPsJg','v_ZH8hnmjRDsI','v_a9qztQPPsJg','v_m_ST2LDe5lA','v_nYxjWwJrHwk','v_swmNnPkPBek','v_nYxjWwJrHwk','v_RPLbUeV3-o0','v_WSpfyZuoi3A','v_TqcoukXhXeA','v_LjfF72Hwpyg','v_gdyEfPbUEjw','v_5LGh56euaZs','v_YW3mCNKVaa4','v_WdKelyOqZvU','v_zEttEkAdHts','v_qn7LRqyyjVE', 'v_TfIGKODkpPY']
+    ignored_list = []
     for video_name in tqdm(video_list[::-1]):
     # for video_name in tqdm(video_list):
         folder_name = osp.splitext(osp.basename(video_name))[0]
